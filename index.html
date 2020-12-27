@@ -23,6 +23,29 @@
         game.showMessage = document.querySelector(".message");
         game.inputArea  = document.querySelector("input");
         game.guessBtn = document.querySelector("button");
+        game.guessBtn.addEventListener("click", function () {
+           guessNumber = game.inputArea.value;
+
+           numericGuessNumber = parseInt(guessNumber);
+           if(isNaN(numericGuessNumber)){
+               showMessage("Please Enter The Digits Only","red");
+           }
+           else if(numericGuessNumber === game.num){
+               showMessage("Whoaa! You Guessed The Correct Number. The Number Is "  + game.num, "Yellow")
+
+           }
+            else{
+               let holder = numericGuessNumber > game.num ? 
+               {'c':"blue",'m':"Was Lower"}:
+               {'c': "purple",'m':"Was Higher"};
+                showMessage(holder.m,holder.c);
+                game.inputArea.style.borderColor =holder.c;
+
+            }   
+        
+
+            console.log(game.num);
+        })
         init();
     })
     function init(){
