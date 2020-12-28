@@ -3,56 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guess The Number Game</title>-
+    <title>Guess The Number Game</title>
+    <style>
+        *{
+            margin : 0px;
+            padding : 0px;
+        }
+    .container{
+        background-color: rgba(154, 236, 236, 0.575);
+        padding: 10px;
+        height: 800px;
+      
+    }
+    .message{
+        font-size: large;
+        font-weight: 600;
+        font-family:  sans-serif;
+    }
+    button{
+        text-align: center;
+        font-size: 1.4em;
+        padding: 5px;
+        font-family: sans-serif;
+        border-radius: 5px;
+        min-width: 100px;
+    }
+    .restartGame{
+        padding: 5px;
+
+    }
+    input{
+        font-size: 1.3em;
+        border-radius: 50px;
+    }
+
+    </style>
 </head>
 <body>
+   <div class="container">
     <div class="output">
-        <div class="message"></div>
-        <input type="number">
-        <button class="guessBtn">Guess</button>
+        <div class="message"></div>  <br>
+        <input type="number" style="text-align: center;"> <br> <br>
+        <button class="guessBtn">Guess</button> <br> <br>
+        <br>
+        <img src="giphy.gif" alt=""> 
     </div>
+   </div>
     <script>
-        
-
         let game = {"min":1, "max":10};
-
-
         document.addEventListener("DOMContentLoaded",function(){
-            console.log("Ready");
+        console.log("Ready");
         game.output = document.querySelector(".output");
         game.showMessage = document.querySelector(".message");
         game.inputArea  = document.querySelector("input");
         game.guessBtn = document.querySelector("button");
-        game.guessBtn.addEventListener("click", function () {
-           guessNumber = game.inputArea.value;
+        game.guessBtn.addEventListener("click",gameStart);
+        game.gif = document.querySelector("img");
+        game.gif.style.width = "70%";
+        game.gif.style.display = "none";
+        game.gif.style.textAlign = "center";
 
+        
+        init();
+        });
+        function gameStart(){
+            if(game.guessBtn.classList.contains("restartGame")){
+            afterRestart();
+            game.guessBtn.innerHTML = "Guess";
+            game.inputArea.style.display = "block";
+            game.guessBtn.classList.remove("restartGame");
+            }
+            
+            else{
+            
+           game.guesses++;
+      
+           guessNumber = game.inputArea.value;
+           game.inputArea.value = "";
            numericGuessNumber = parseInt(guessNumber);
            if(isNaN(numericGuessNumber)){
                showMessage("Please Enter The Digits Only","red");
            }
            else if(numericGuessNumber === game.num){
-               showMessage("Whoaa! You Guessed The Correct Number. The Number Is "  + game.num, "Yellow")
+               showMessage(`Hurray! You Guessed The Number  ${game.num }    In    ${game.guesses}    Guesses`,"orange");
+               game.gif.style.display = "block";
+               game.showMessage.style.margin = "0px"
+               gameOver();
 
            }
             else{
                let holder = numericGuessNumber > game.num ? 
-               {'c':"blue",'m':"Was Lower"}:
-               {'c': "purple",'m':"Was Higher"};
+               {'c':"blue",'m':"I think you should pick a Lower Number To Win"}:
+               {'c': "purple",'m':"I think you should pick a Higher Number To Win"};
                 showMessage(holder.m,holder.c);
-                game.inputArea.style.borderColor =holder.c;
-
             }   
-        
+         console.log(game.num);
+        }
+    }
 
-            console.log(game.num);
-        })
-        init();
-    })
     function init(){
-            const tempMes = "Wellcome To The Game Dear.Now Guess a Number From "+
-                                 game.min + " To" + game.max;
-                                 game.num = ranNumber(game.min, game.max)
-        showMessage(tempMes,"green")
+            game.guesses = 0;
+            const tempMes = `Wellcome To The Game Dear,You Have To Guess a Number From ${game.min}  To  ${game.max}` ;
+            game.num = ranNumber(game.min, game.max);
+            showMessage(tempMes,"green")
     }
     function ranNumber(min, max) {
         return Math.floor(Math.random() * (max-min + 1)+ min);
@@ -61,6 +114,31 @@
     function showMessage(mes,clr) {
             game.showMessage.innerHTML = mes;
             game.showMessage.style.color = clr||"red";
+            game.inputArea.style.borderColor = clr || "black";
+            game.guessBtn.style.background  = clr || "black";
+            game.guessBtn.style.color = "white"
+            
+            
+
+    }
+
+    function gameOver(){
+            game.guessBtn.innerHTML = "Restart The Game";
+            game.inputArea.style.display = "none";
+            game.guessBtn.classList.add("restartGame");
+            game.max+=5;
+           
+    }
+    function afterRestart() {
+            
+            game.guesses = 0;
+            const tempMess = `Wellcome Back To The Game Dear, But This Time You Have To Guess a Number From  ${game.min}  To ${game.max}`;
+            game.num = ranNumber(game.min, game.max);
+            showMessage(tempMess,"green");
+            game.gif.style.display = "none";
+
+
+            
     }
     </script>
 </body>
